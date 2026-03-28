@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blaide Loan Checker — Check Smart. Borrow Better. | Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--navy:#0a1628;--gold:#c9973a;--gold-light:#f0c060;--white:#ffffff;--gray:#8492a6;--soft:#eef2f7;--green:#1a9e6b;--red:#d94f3d;--card-bg:#ffffff;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--navy);min-height:100vh;}
+    nav{background:var(--navy);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,151,58,0.2);}
+    .logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);}
+    .logo span{color:var(--gold);}
+    .tagline-nav{font-size:10px;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;}
+    .hero{background:linear-gradient(145deg,#0a1628 0%,#12244a 60%,#1a3060 100%);padding:44px 20px 40px;text-align:center;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(201,151,58,0.12) 0%,transparent 70%);}
+    .hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(201,151,58,0.08) 0%,transparent 70%);}
+    .badge{display:inline-block;background:rgba(201,151,58,0.15);border:1px solid rgba(201,151,58,0.3);color:var(--gold-light);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:16px;}
+    .hero h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);line-height:1.2;margin-bottom:10px;position:relative;z-index:1;}
+    .hero h1 span{color:var(--gold);}
+    .hero p{color:#9aafc8;font-size:14px;max-width:360px;margin:0 auto 28px;position:relative;z-index:1;line-height:1.6;}
+    .tabs{display:flex;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px;margin:0 auto;max-width:420px;position:relative;z-index:1;flex-wrap:wrap;gap:2px;}
+    .tab-btn{flex:1;min-width:70px;padding:9px 4px;border:none;background:transparent;color:#9aafc8;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;border-radius:9px;transition:all 0.25s;}
+    .tab-btn.active{background:var(--gold);color:var(--navy);font-weight:700;}
+    .container{max-width:480px;margin:0 auto;padding:20px 14px 80px;}
+    .section{display:none;}
+    .section.active{display:block;}
+    .card{background:var(--card-bg);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+    .card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .card-title .icon{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+    label{display:block;font-size:12px;font-weight:500;color:#4a5568;margin-bottom:5px;}
+    input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--navy);background:var(--soft);margin-bottom:12px;transition:border 0.2s;-webkit-appearance:none;}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);background:#fff;}
+    .input-prefix{position:relative;}
+    .input-prefix span{position:absolute;left:13px;top:12px;font-weight:600;color:var(--gray);font-size:13px;pointer-events:none;}
+    .input-prefix input{padding-left:38px;}
+    .btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:transform 0.15s;box-shadow:0 4px 16px rgba(201,151,58,0.3);}
+    .btn:active{transform:scale(0.98);}
+    .result-box{background:linear-gradient(135deg,#0a1628,#12244a);border-radius:14px;padding:18px;margin-top:14px;color:white;display:none;}
+    .result-box.show{display:block;animation:fadeUp 0.3s ease;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .result-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .result-row:last-child{border-bottom:none;}
+    .result-label{font-size:12px;color:#9aafc8;}
+    .result-value{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--gold-light);}
+    .result-value.green{color:#4ade9a;}
+    .result-value.red{color:#f87171;}
+    .loan-card{background:var(--card-bg);border-radius:14px;padding:14px;margin-bottom:10px;border-left:4px solid var(--gold);box-shadow:0 2px 10px rgba(0,0,0,0.06);position:relative;}
+    .loan-card.best{border-left-color:var(--green);background:linear-gradient(135deg,#f0fff8,#ffffff);}
+    .best-badge{position:absolute;top:-8px;right:10px;background:var(--green);color:white;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:20px;}
+    .loan-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+    .loan-provider{font-size:11px;color:var(--gray);margin-bottom:9px;}
+    .loan-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+    .stat{background:var(--soft);border-radius:8px;padding:7px 9px;}
+    .stat-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:0.7px;}
+    .stat-value{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-top:2px;}
+    .stat-value.highlight{color:var(--gold);}
+    .check-item{display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-bottom:1px solid #f0f4f8;}
+    .check-item:last-child{border-bottom:none;}
+    .check-dot{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px;}
+    .check-dot.yes{background:#d1fae5;color:var(--green);}
+    .check-dot.no{background:#fee2e2;color:var(--red);}
+    .check-dot.maybe{background:#fef3c7;color:#d97706;}
+    .check-text{font-size:13px;color:#4a5568;line-height:1.4;}
+    .check-text strong{color:var(--navy);}
+    .tip-card{background:linear-gradient(135deg,#fffbeb,#fff);border:1px solid #fde68a;border-radius:12px;padding:13px 14px;margin-bottom:9px;display:flex;gap:10px;align-items:flex-start;}
+    .tip-icon{font-size:18px;flex-shrink:0;}
+    .tip-text{font-size:13px;color:#4a5568;line-height:1.5;}
+    .tip-text strong{color:var(--navy);display:block;margin-bottom:2px;font-size:13px;}
+    .section-header{margin-bottom:18px;}
+    .section-header h2{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--white);margin-bottom:4px;}
+    .section-header p{font-size:12px;color:#6b84a0;}
+    .cat-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;}
+    .cat-tab{flex-shrink:0;padding:7px 14px;border:1.5px solid rgba(201,151,58,0.3);border-radius:20px;background:transparent;color:#9aafc8;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    .cat-tab.active{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:700;}
+    .bank-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f4f8;}
+    .bank-item:last-child{border-bottom:none;}
+    .bank-name{font-size:13px;font-weight:600;color:var(--navy);}
+    .bank-type{font-size:10px;color:var(--gray);margin-top:2px;}
+    .bank-rate{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0;margin-left:8px;}
+    .page-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--navy);z-index:999;overflow-y:auto;animation:slideIn 0.3s ease;}
+    @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+    .page-header{background:var(--navy);position:sticky;top:0;z-index:10;padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(201,151,58,0.2);}
+    .back-btn{background:rgba(201,151,58,0.15);border:1px solid rgba(201,151,58,0.3);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;}
+    .page-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--white);}
+    .page-body{max-width:480px;margin:0 auto;padding:18px 14px 60px;}
+    .policy-section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #f0f4f8;}
+    .policy-section:last-child{border-bottom:none;margin-bottom:0;}
+    .policy-section h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:7px;}
+    .policy-section p{font-size:13px;color:#4a5568;line-height:1.7;}
+    .policy-section ul{margin:7px 0 0 15px;font-size:13px;color:#4a5568;line-height:1.8;}
+    footer{background:#060e1d;padding:24px 20px;text-align:center;border-top:1px solid rgba(201,151,58,0.15);}
+    .footer-logo{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--white);margin-bottom:5px;}
+    .footer-logo span{color:var(--gold);}
+    .footer-links{display:flex;justify-content:center;align-items:center;gap:8px;margin:12px 0;flex-wrap:wrap;}
+    .footer-link{background:none;border:none;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;}
+    .powered{margin-top:10px;font-size:11px;color:#3a5070;}
+    .powered span{color:#6b84a0;font-weight:700;}
+    select option{color:var(--navy);}
+    .note-box{margin-top:10px;padding:10px;background:#fff8e7;border-radius:8px;font-size:11px;color:#92400e;}
+    .note-box-green{margin-top:10px;padding:10px;background:#e8f5e9;border-radius:8px;font-size:11px;color:#1b5e20;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div>
+    <div class="logo">Blaide <span>Loan</span> Checker</div>
+    <div class="tagline-nav">Check Smart. Borrow Better.</div>
+  </div>
+  <div style="font-size:20px;">🇰🇪</div>
+</nav>
+
+<div class="hero">
+  <div class="badge">Kenya's Free Loan Comparison Tool</div>
+  <h1>Find Your Best <span>Loan</span> in Kenya</h1>
+  <p>Compare 20+ mobile apps, all 38 banks & SACCOs. Calculate repayments. Borrow wisely.</p>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('compare',this)">🔍 Compare</button>
+    <button class="tab-btn" onclick="switchTab('calculator',this)">🧮 Calculate</button>
+    <button class="tab-btn" onclick="switchTab('lenders',this)">🏦 Lenders</button>
+    <button class="tab-btn" onclick="switchTab('eligibility',this)">✅ Eligibility</button>
+    <button class="tab-btn" onclick="switchTab('tips',this)">💡 Tips</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- COMPARE -->
+  <div class="section active" id="compare">
+    <div class="section-header"><h2>Compare Loans</h2><p>Ranked cheapest to most expensive for your amount</p></div>
+    <div class="card">
+      <div class="card-title"><div class="icon">💰</div>How much do you need?</div>
+      <label>Loan Amount (KSh)</label>
+      <div class="input-prefix"><span>KSh</span><input type="number" id="compareAmount" placeholder="e.g. 5000" min="100" max="5000000"/></div>
+      <label>Repayment Period</label>
+      <select id="comparePeriod">
+        <option value="30">30 days (1 month)</option>
+        <option value="90">90 days (3 months)</option>
+        <option value="180">180 days (6 months)</option>
+        <option value="365">365 days (1 year)</option>
+      </select>
+      <label>Category</label>
+      <select id="compareCategory">
+        <option value="all">All (Mobile + Banks)</option>
+        <option value="mobile">Mobile Apps Only</option>
+        <option value="bank">Banks Only</option>
+      </select>
+      <button class="btn" onclick="compareLoans()">🔍 Compare Now</button>
+    </div>
+    <div id="compareResults"></div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="section" id="calculator">
+    <div class="section-header"><h2>Repayment Calculator</h2><p>Know exactly what you will pay back</p></div>
+    <div class="card">
+      <div class="card-title"><div class="icon">🧮</div>Loan Details</div>
+      <label>Select Lender</label>
+      <select id="calcApp">
+        <optgroup label="🏛️ Government">
+          <option value="hustler">Hustler Fund (8% p.a.)</option>
+        </optgroup>
+        <optgroup label="📱 Mobile Apps">
+          <option value="timiza">Timiza / Absa (1.083% p.m.)</option>
+          <option value="littlepesa">Little Pesa (4.5% p.m.)</option>
+          <option value="equity">Equity Eazzy (~6% p.m.)</option>
+          <option value="mshwari">M-Shwari (7.5% per 30 days)</option>
+          <option value="kcb">KCB M-Pesa (7.5% p.m.)</option>
+          <option value="branch">Branch (2%–18% p.m.)</option>
+          <option value="okolea">Okolea (11.15% p.m.)</option>
+          <option value="tala">Tala (~0.3% per day)</option>
+          <option value="ipesa">iPesa (18% p.m.)</option>
+          <option value="zenka">Zenka / Koro (9%–39% per loan)</option>
+          <option value="lendplus">LendPlus (9%–30% p.m.)</option>
+          <option value="fuliza">Fuliza (1% daily)</option>
+          <option value="zash">Zash Loan (2.08% daily)</option>
+        </optgroup>
+        <optgroup label="🏦 Banks (per annum)">
+          <option value="citi">Citibank Kenya (~10% p.a.)</option>
+          <option value="stanchart">Standard Chartered (~10.5% p.a.)</option>
+          <option value="kcbbank">KCB Bank (~13% p.a.)</option>
+          <option value="equity_bank">Equity Bank (~13.5% p.a.)</option>
+          <option value="coop">Co-operative Bank (~14% p.a.)</option>
+          <option value="stanbic">Stanbic Bank (~14% p.a.)</option>
+          <option value="ncba">NCBA Bank (~14.5% p.a.)</option>
+          <option value="absa">ABSA Bank (~14.5% p.a.)</option>
+          <option value="dtb">Diamond Trust Bank (~15% p.a.)</option>
+          <option value="im_bank">I&amp;M Bank (~15% p.a.)</option>
+          <option value="nbk">National Bank of Kenya (~15% p.a.)</option>
+          <option value="family">Family Bank (~15.5% p.a.)</option>
+          <option value="hfc">HFC Limited (~16.6% p.a.)</option>
+          <option value="credit">Credit Bank PLC (~18.8% p.a.)</option>
+          <option value="access">Access Bank Kenya (~19.1% p.a.)</option>
+        </optgroup>
+        <optgroup label="🤝 SACCOs">
+          <option value="sacco_low">SACCO (good rate ~12% p.a.)</option>
+          <option value="sacco_mid">SACCO (average ~14% p.a.)</option>
+        </optgroup>
+      </select>
+      <label>Loan Amount (KSh)</label>
+      <div class="input-prefix"><span>KSh</span><input type="number" id="calcAmount" placeholder="e.g. 10000" min="100" max="5000000"/></div>
+      <label>Repayment Period (Days)</label>
+      <input type="number" id="calcDays" placeholder="e.g. 30" min="1" max="1825"/>
+      <button class="btn" onclick="calculateLoan()">🧮 Calculate Repayment</button>
+    </div>
+    <div class="result-box" id="calcResult">
+      <div class="result-row"><span class="result-label">Loan Amount</span><span class="result-value" id="r-principal">—</span></div>
+      <div class="result-row"><span class="result-label">Total Interest / Fee</span><span class="result-value red" id="r-interest">—</span></div>
+      <div class="result-row"><span class="result-label">Total Repayment</span><span class="result-value" id="r-total">—</span></div>
+      <div class="result-row"><span class="result-label">Daily Cost</span><span class="result-value green" id="r-daily">—</span></div>
+      <div class="result-row"><span class="result-label">Due Date (from today)</span><span class="result-value" id="r-duedate">—</span></div>
+    </div>
+  </div>
+
+  <!-- LENDERS -->
+  <div class="section" id="lenders">
+    <div class="section-header"><h2>All Kenya Lenders</h2><p>Mobile apps, all 38 banks &amp; SACCOs</p></div>
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="showCat('mobile',this)">📱 Mobile Apps</button>
+      <button class="cat-tab" onclick="showCat('banks',this)">🏦 38 Banks</button>
+      <button class="cat-tab" onclick="showCat('sacco',this)">🤝 SACCOs</button>
+    </div>
+
+    <div id="lenders-mobile">
+      <div class="card">
+        <div class="card-title"><div class="icon">📱</div>Mobile Loan Apps — 20+</div>
+        <div class="bank-item"><div><div class="bank-name">🟢 Hustler Fund</div><div class="bank-type">Govt · Dial *254# · Up to KSh 50,000</div></div><div class="bank-rate">8% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Timiza (Absa)</div><div class="bank-type">*848# or App · Up to KSh 150,000</div></div><div class="bank-rate">1.083% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Little Pesa</div><div class="bank-type">App · Up to KSh 300,000</div></div><div class="bank-rate">4.5% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Equity Eazzy</div><div class="bank-type">*247# or App · Up to KSh 3M</div></div><div class="bank-rate">~6% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">KCB M-Pesa</div><div class="bank-type">M-Pesa menu · Up to KSh 100,000</div></div><div class="bank-rate">7.5% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">M-Shwari (NCBA)</div><div class="bank-type">M-Pesa menu · Up to KSh 70,000</div></div><div class="bank-rate">7.5%/30d</div></div>
+        <div class="bank-item"><div><div class="bank-name">Branch</div><div class="bank-type">App · Up to KSh 300,000</div></div><div class="bank-rate">2–18% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Okolea</div><div class="bank-type">App · SME focus</div></div><div class="bank-rate">11.15% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Tala</div><div class="bank-type">App · Up to KSh 50,000</div></div><div class="bank-rate">0.3%/day</div></div>
+        <div class="bank-item"><div><div class="bank-name">Zenka / Koro</div><div class="bank-type">App · Up to KSh 200,000 · 0% first loan</div></div><div class="bank-rate">9–39%/loan</div></div>
+        <div class="bank-item"><div><div class="bank-name">iPesa</div><div class="bank-type">App · Quick microloans</div></div><div class="bank-rate">18% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">LendPlus</div><div class="bank-type">App · No guarantors needed</div></div><div class="bank-rate">9–30% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Fuliza (Safaricom)</div><div class="bank-type">M-Pesa overdraft · Instant</div></div><div class="bank-rate">1% daily</div></div>
+        <div class="bank-item"><div><div class="bank-name">Zash Loan</div><div class="bank-type">App · Short-term emergency</div></div><div class="bank-rate">2.08% daily</div></div>
+        <div class="bank-item"><div><div class="bank-name">UbaPesa</div><div class="bank-type">App · Peer-to-peer lending</div></div><div class="bank-rate">0–15%/term</div></div>
+        <div class="bank-item"><div><div class="bank-name">Jijenge Credit</div><div class="bank-type">App · Asset finance · Up to KSh 10M</div></div><div class="bank-rate">3.75% p.m.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Flash Credit Africa</div><div class="bank-type">App · Salary advance (KSh 30K+ salary)</div></div><div class="bank-rate">Varies</div></div>
+        <div class="bank-item"><div><div class="bank-name">Fanisi Credit (Women)</div><div class="bank-type">App · Women only · KSh 20K–30K</div></div><div class="bank-rate">10–12.5% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Ngao Credit</div><div class="bank-type">App · CBK licensed DCP</div></div><div class="bank-rate">Varies</div></div>
+        <div class="bank-item"><div><div class="bank-name">Progressive Credit</div><div class="bank-type">App · MSME loans</div></div><div class="bank-rate">Varies</div></div>
+        <div class="bank-item"><div><div class="bank-name">Loop (NCBA)</div><div class="bank-type">App · Digital banking & loans</div></div><div class="bank-rate">Varies</div></div>
+        <div class="bank-item"><div><div class="bank-name">Kashbean</div><div class="bank-type">App · Instant microloans</div></div><div class="bank-rate">Varies</div></div>
+        <div class="bank-item"><div><div class="bank-name">Creditmoja</div><div class="bank-type">App · Licensed DCP</div></div><div class="bank-rate">Varies</div></div>
+        <div class="note-box">⚠️ CBK has licensed 51+ Digital Credit Providers (DCPs). Rates shown are estimates — always confirm in the app before applying. Avoid unlicensed lenders.</div>
+      </div>
+    </div>
+
+    <div id="lenders-banks" style="display:none;">
+      <div class="card">
+        <div class="card-title"><div class="icon">🏦</div>All 38 Licensed Commercial Banks</div>
+        <p style="font-size:11px;color:#8492a6;margin-bottom:12px;">CBK Jan 2026 data. Sector average: ~14.8% p.a. Rates vary by borrower profile.</p>
+        <div class="bank-item"><div><div class="bank-name">Citibank Kenya</div><div class="bank-type">International · Corporate-focused</div></div><div class="bank-rate">~10.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Standard Chartered Bank</div><div class="bank-type">International · Retail &amp; Corporate</div></div><div class="bank-rate">~10.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">KCB Bank Kenya</div><div class="bank-type">Largest bank · Nationwide</div></div><div class="bank-rate">~13.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Equity Bank Kenya</div><div class="bank-type">Largest by accounts · MSMEs</div></div><div class="bank-rate">~13.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Co-operative Bank</div><div class="bank-type">SACCO-linked · Rural reach</div></div><div class="bank-rate">~14.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Stanbic Bank Kenya</div><div class="bank-type">Standard Bank Group</div></div><div class="bank-rate">~14.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">NCBA Bank Kenya</div><div class="bank-type">NIC + CBA merger · Digital-first</div></div><div class="bank-rate">~14.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">ABSA Bank Kenya</div><div class="bank-type">Formerly Barclays · Retail &amp; Business</div></div><div class="bank-rate">~14.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">I&amp;M Bank Kenya</div><div class="bank-type">Mid-tier · SME &amp; Corporate</div></div><div class="bank-rate">~15.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Diamond Trust Bank (DTB)</div><div class="bank-type">East Africa · Trade finance</div></div><div class="bank-rate">~15.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">National Bank of Kenya (NBK)</div><div class="bank-type">KCB subsidiary · Government-linked</div></div><div class="bank-rate">~15.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Family Bank</div><div class="bank-type">Community banking · County presence</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Prime Bank Kenya</div><div class="bank-type">Mid-tier · Business loans</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Gulf African Bank</div><div class="bank-type">Islamic banking · Shariah-compliant</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Bank of Africa Kenya</div><div class="bank-type">Pan-African group</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Ecobank Kenya</div><div class="bank-type">Pan-African · Trade &amp; SME</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Sidian Bank</div><div class="bank-type">MSME specialist · Centum-owned</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Consolidated Bank Kenya</div><div class="bank-type">Government-linked</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Victoria Commercial Bank</div><div class="bank-type">Niche corporate lender</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Spire Bank</div><div class="bank-type">Digital-first mid-tier</div></div><div class="bank-rate">~15.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Trans-National Bank</div><div class="bank-type">Mid-tier · KCB stake</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Guaranty Trust Bank (GTBank)</div><div class="bank-type">Nigerian-origin · Growing</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">UBA Kenya Bank</div><div class="bank-type">United Bank for Africa</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Bank of India Kenya</div><div class="bank-type">Trade finance · Asian community</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Habib Bank AG Zurich</div><div class="bank-type">Swiss-owned · Trade finance</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Paramount Bank</div><div class="bank-type">Formerly Fina Bank</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Oriental Commercial Bank</div><div class="bank-type">Mid-tier · SME &amp; Trade</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Mayfair CIB Bank</div><div class="bank-type">Corporate &amp; Investment Banking</div></div><div class="bank-rate">~16.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">HFC Limited</div><div class="bank-type">Housing finance specialist</div></div><div class="bank-rate">~16.6%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Middle East Bank Kenya</div><div class="bank-type">Middle East clientele</div></div><div class="bank-rate">~16.6%</div></div>
+        <div class="bank-item"><div><div class="bank-name">DIB Bank Kenya</div><div class="bank-type">Dubai Islamic Bank · Shariah</div></div><div class="bank-rate">~16.7%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Faulu Microfinance Bank</div><div class="bank-type">Old Mutual subsidiary · MFB</div></div><div class="bank-rate">~17.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Kenya Women Finance Trust (KWFT)</div><div class="bank-type">Women-focused · MFB</div></div><div class="bank-rate">~17.0%</div></div>
+        <div class="bank-item"><div><div class="bank-name">SMEP Microfinance Bank</div><div class="bank-type">Faith-based · SME &amp; Community</div></div><div class="bank-rate">~17.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Rafiki Microfinance Bank</div><div class="bank-type">KCB subsidiary</div></div><div class="bank-rate">~17.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Choice Microfinance Bank</div><div class="bank-type">Community lender</div></div><div class="bank-rate">~17.5%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Credit Bank PLC</div><div class="bank-type">Mid-tier · High deposit rates</div></div><div class="bank-rate">~18.8%</div></div>
+        <div class="bank-item"><div><div class="bank-name">Access Bank Kenya</div><div class="bank-type">Nigerian-origin · Growing fast</div></div><div class="bank-rate">~19.1%</div></div>
+        <div class="note-box">📊 Source: CBK Jan 2026. Rates are weighted averages. Your actual rate depends on credit profile, loan type &amp; amount. Always compare total cost of credit (TCC).</div>
+      </div>
+    </div>
+
+    <div id="lenders-sacco" style="display:none;">
+      <div class="card">
+        <div class="card-title"><div class="icon">🤝</div>SACCOs &amp; Microfinance</div>
+        <div class="bank-item"><div><div class="bank-name">Stima SACCO</div><div class="bank-type">Energy sector · KPLC, Kenya Power staff</div></div><div class="bank-rate">12% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Mwalimu National SACCO</div><div class="bank-type">Teachers · TSC members</div></div><div class="bank-rate">12% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Kenya Police SACCO</div><div class="bank-type">Police officers &amp; staff</div></div><div class="bank-rate">12% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Afya SACCO</div><div class="bank-type">Health sector workers</div></div><div class="bank-rate">12% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Harambee SACCO</div><div class="bank-type">Civil servants · Government</div></div><div class="bank-rate">12% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Unaitas SACCO</div><div class="bank-type">Open membership · Muranga &amp; Central</div></div><div class="bank-rate">13% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Tower SACCO</div><div class="bank-type">Open membership · Nairobi</div></div><div class="bank-rate">14% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Imarisha SACCO</div><div class="bank-type">Open membership · Coast region</div></div><div class="bank-rate">14% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Waumini SACCO</div><div class="bank-type">Catholic Church members</div></div><div class="bank-rate">14% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Kenya National Police DT SACCO</div><div class="bank-type">Police · Open membership</div></div><div class="bank-rate">14% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Faulu Microfinance Bank</div><div class="bank-type">Group &amp; individual loans · SME</div></div><div class="bank-rate">~17% p.a.</div></div>
+        <div class="bank-item"><div><div class="bank-name">Kenya Women Finance Trust (KWFT)</div><div class="bank-type">Women · Group loans nationwide</div></div><div class="bank-rate">~17% p.a.</div></div>
+        <div class="note-box-green">💡 SACCOs offer Kenya's lowest loan rates (12%–14% p.a.) — often even lower than Hustler Fund for large amounts. If your employer has a SACCO, join it immediately and start saving to qualify for loans.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELIGIBILITY -->
+  <div class="section" id="eligibility">
+    <div class="section-header"><h2>Eligibility Checker</h2><p>See which loans you qualify for right now</p></div>
+    <div class="card">
+      <div class="card-title"><div class="icon">✅</div>Your Profile</div>
+      <label>Active M-Pesa line?</label>
+      <select id="hasMpesa"><option value="yes">Yes, active</option><option value="no">No</option></select>
+      <label>M-Pesa account age</label>
+      <select id="mpesaAge"><option value="new">Less than 6 months</option><option value="mid">6 months – 1 year</option><option value="old">Over 1 year</option></select>
+      <label>CRB (Credit Reference Bureau) status</label>
+      <select id="crb"><option value="no">Not listed (clean)</option><option value="yes">Listed / blacklisted</option><option value="unsure">Not sure</option></select>
+      <label>M-Pesa transaction activity</label>
+      <select id="activity"><option value="high">Very active (daily)</option><option value="medium">Moderate (weekly)</option><option value="low">Low (monthly or less)</option></select>
+      <label>Employment / income status</label>
+      <select id="employed"><option value="yes">Employed with payslip</option><option value="business">Self-employed / Business owner</option><option value="no">No regular income</option></select>
+      <button class="btn" onclick="checkEligibility()">✅ Check My Eligibility</button>
+    </div>
+    <div id="eligibilityResults"></div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="section" id="tips">
+    <div class="section-header"><h2>Smart Borrowing Tips</h2><p>Protect yourself. Build your credit. Save money.</p></div>
+    <div class="tip-card"><div class="tip-icon">🏆</div><div class="tip-text"><strong>Try Hustler Fund first — always</strong>At 8% p.a. it is Kenya's cheapest loan. Far cheaper than any mobile app or bank. Dial *254# to check your limit instantly.</div></div>
+    <div class="tip-card"><div class="tip-icon">📊</div><div class="tip-text"><strong>SACCOs beat everyone</strong>SACCO rates (12% p.a.) are lower than banks and mobile apps. If your employer has a SACCO, join immediately and start saving.</div></div>
+    <div class="tip-card"><div class="tip-icon">💡</div><div class="tip-text"><strong>Timiza is a hidden gem</strong>Absa Timiza charges only 1.083% per month — much cheaper than Tala or Branch. Up to KSh 150,000. Dial *848# or download the app.</div></div>
+    <div class="tip-card"><div class="tip-icon">🆓</div><div class="tip-text"><strong>Zenka first loan is FREE</strong>New Zenka users get 0% interest on their very first loan. Use this to build your credit profile at zero cost.</div></div>
+    <div class="tip-card"><div class="tip-icon">📈</div><div class="tip-text"><strong>Grow your mobile loan limit</strong>Repay early. Save on the app. Transact on M-Pesa daily. Every on-time repayment grows your limit automatically over time.</div></div>
+    <div class="tip-card"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>Beware Fuliza and Zash</strong>Fuliza charges 1% daily (365%+ p.a.). Zash charges 2.08% daily. Only use for same-day emergencies. Repay within 24 hours.</div></div>
+    <div class="tip-card"><div class="tip-icon">🔍</div><div class="tip-text"><strong>Check your CRB status now</strong>Dial *433# (Metropol) or *515# (TransUnion) — both are free. Being listed blocks bank loans and some apps. Clear debts to be removed.</div></div>
+    <div class="tip-card"><div class="tip-icon">🏦</div><div class="tip-text"><strong>Best banks for individuals</strong>KCB, Equity, and Co-op Bank are most accessible at ~13–14% p.a. Bring your payslip, national ID and 3–6 months bank statement.</div></div>
+    <div class="tip-card"><div class="tip-icon">🆘</div><div class="tip-text"><strong>Struggling to repay?</strong>Contact your lender BEFORE the due date. Tala, Branch and Zenka offer extensions. Ignoring a loan leads to CRB listing and penalty fees.</div></div>
+    <div class="tip-card"><div class="tip-icon">🤝</div><div class="tip-text"><strong>Women-only options</strong>Ladies — Fanisi Credit and KWFT offer loans exclusively for women at very competitive rates. Fanisi first loan: KSh 20,000–30,000.</div></div>
+  </div>
+
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="page-contact" class="page-modal" style="display:none;">
+  <div class="page-header">
+    <button class="back-btn" onclick="closePage('page-contact')">← Back</button>
+    <div class="page-title">Contact Us</div>
+  </div>
+  <div class="page-body">
+    <div class="card">
+      <div class="card-title"><div class="icon">✉️</div>Send Us a Message</div>
+      <p style="font-size:13px;color:#4a5568;margin-bottom:16px;line-height:1.6;">Questions, feedback, wrong loan data, or partnership inquiries? Fill in the form below or contact us directly.</p>
+      <label>Your Name</label>
+      <input type="text" id="contact-name" placeholder="e.g. John Kamau"/>
+      <label>Email Address</label>
+      <input type="email" id="contact-email" placeholder="e.g. john@gmail.com"/>
+      <label>Subject</label>
+      <select id="contact-subject">
+        <option>General Inquiry</option>
+        <option>Report Wrong Loan Data</option>
+        <option>Partnership / Advertising</option>
+        <option>Technical Issue</option>
+        <option>Feedback / Suggestion</option>
+      </select>
+      <label>Your Message</label>
+      <textarea id="contact-msg" placeholder="Write your message here..." style="min-height:100px;resize:vertical;margin-bottom:12px;"></textarea>
+      <button class="btn" onclick="submitContact()">📨 Send Message</button>
+      <div id="contact-success" style="display:none;margin-top:12px;background:#d1fae5;border-radius:10px;padding:12px;text-align:center;color:#065f46;font-size:13px;font-weight:600;">✅ Thank you! We will respond within 24 hours.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon">📍</div>Direct Contact — AgunexTech</div>
+      <div class="check-item">
+        <div class="check-dot yes">📧</div>
+        <div class="check-text"><strong>Email</strong><br/>agunextech@outlook.com</div>
+      </div>
+      <div class="check-item">
+        <div class="check-dot yes">📞</div>
+        <div class="check-text"><strong>Phone / WhatsApp</strong><br/>+254 708 692 155</div>
+      </div>
+      <div class="check-item">
+        <div class="check-dot yes">🌍</div>
+        <div class="check-text"><strong>Brand</strong><br/>AgunexTech — Building Digital Solutions for Kenya 🇰🇪</div>
+      </div>
+      <div class="check-item">
+        <div class="check-dot yes">🕐</div>
+        <div class="check-text"><strong>Response Time</strong><br/>Within 24 hours, Monday to Saturday</div>
+      </div>
+      <div class="check-item">
+        <div class="check-dot yes">💼</div>
+        <div class="check-text"><strong>Partnerships &amp; Advertising</strong><br/>We welcome lenders, SACCOs, and fintech companies interested in reaching Kenyan borrowers. Email us for our media kit.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY -->
+<div id="page-privacy" class="page-modal" style="display:none;">
+  <div class="page-header">
+    <button class="back-btn" onclick="closePage('page-privacy')">← Back</button>
+    <div class="page-title">Privacy Policy</div>
+  </div>
+  <div class="page-body">
+    <div class="card">
+      <p style="font-size:11px;color:#8492a6;margin-bottom:14px;">Last updated: March 2026 &nbsp;|&nbsp; Blaide Loan Checker by AgunexTech</p>
+      <div class="policy-section"><h3>1. Who We Are</h3><p>Blaide Loan Checker is a product of <strong>AgunexTech</strong>, a Kenyan digital solutions brand. We provide a free loan comparison and calculation tool for Kenyans. Contact: <strong>agunextech@outlook.com</strong> | <strong>+254 708 692 155</strong>.</p></div>
+      <div class="policy-section"><h3>2. Data We Collect</h3><p>We do <strong>not</strong> collect, store, or sell personal financial data. All calculations run locally in your browser. We may collect:</p><ul><li>Anonymous usage data via Google Analytics</li><li>Contact form submissions (name, email, message) — only when you submit them</li><li>Cookies placed by Google AdSense for advertising</li></ul></div>
+      <div class="policy-section"><h3>3. How We Use Your Data</h3><p>Contact data is used only to respond to your inquiry. We do not share personal data with third parties except as required by law or to operate services (Google Analytics, AdSense).</p></div>
+      <div class="policy-section"><h3>4. Google AdSense &amp; Cookies</h3><p>We use Google AdSense to display ads. Google may use cookies for personalized advertising. You can opt out at <strong>www.aboutads.info</strong> or via your Google account settings.</p></div>
+      <div class="policy-section"><h3>5. Third-Party Lenders</h3><p>We reference third-party lenders for informational purposes only. We are not responsible for their privacy practices. Read their terms before applying for any loan.</p></div>
+      <div class="policy-section"><h3>6. Data Security</h3><p>We do not store your financial data on any server. Your calculations remain private on your device. Contact form data is transmitted securely.</p></div>
+      <div class="policy-section"><h3>7. Children's Privacy</h3><p>Blaide Loan Checker is for users 18 years and above. We do not knowingly collect data from minors.</p></div>
+      <div class="policy-section"><h3>8. Policy Updates</h3><p>We may update this policy periodically. Continued use after changes constitutes acceptance.</p></div>
+      <div class="policy-section"><h3>9. Contact</h3><p>Privacy questions: <strong>agunextech@outlook.com</strong> | <strong>+254 708 692 155</strong></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS & CONDITIONS -->
+<div id="page-terms" class="page-modal" style="display:none;">
+  <div class="page-header">
+    <button class="back-btn" onclick="closePage('page-terms')">← Back</button>
+    <div class="page-title">Terms &amp; Conditions</div>
+  </div>
+  <div class="page-body">
+    <div class="card">
+      <p style="font-size:11px;color:#8492a6;margin-bottom:14px;">Last updated: March 2026 &nbsp;|&nbsp; Blaide Loan Checker by AgunexTech</p>
+      <div class="policy-section"><h3>1. Acceptance</h3><p>By accessing Blaide Loan Checker, you agree to these Terms. If you disagree, do not use this app.</p></div>
+      <div class="policy-section"><h3>2. Informational Only</h3><p>Blaide Loan Checker provides comparison and calculation tools for <strong>informational purposes only</strong>. We are not a bank, lender, or financial advisor, and we do not process loan applications.</p></div>
+      <div class="policy-section"><h3>3. Accuracy</h3><p>We strive to keep information current, but loan rates change frequently. <strong>Always verify rates directly with the lender</strong> before borrowing. AgunexTech is not liable for decisions made based on information in this app.</p></div>
+      <div class="policy-section"><h3>4. No Financial Advice</h3><p>Nothing here is financial, legal, or investment advice. Only borrow what you can comfortably repay. Seek a licensed counselor if in financial difficulty.</p></div>
+      <div class="policy-section"><h3>5. Advertising &amp; Affiliates</h3><p>We use Google AdSense and may include affiliate links. We may earn commission if you apply through our links. Our rankings are based solely on interest rates and not advertising relationships.</p></div>
+      <div class="policy-section"><h3>6. Intellectual Property</h3><p>All content, design, branding, and code is the property of <strong>AgunexTech</strong>. You may not copy, reproduce, or distribute any part without written permission from AgunexTech.</p></div>
+      <div class="policy-section"><h3>7. Limitation of Liability</h3><p>AgunexTech is not liable for any loss arising from use of this app, reliance on information provided, or any borrowing decisions made by users.</p></div>
+      <div class="policy-section"><h3>8. Governing Law</h3><p>These terms are governed by the laws of the Republic of Kenya. Disputes fall under the jurisdiction of Kenyan courts.</p></div>
+      <div class="policy-section"><h3>9. Changes</h3><p>AgunexTech may update these terms at any time. Continued use constitutes acceptance.</p></div>
+      <div class="policy-section"><h3>10. Contact</h3><p>Legal queries: <strong>agunextech@outlook.com</strong> | <strong>+254 708 692 155</strong></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Blaide <span>Loan</span> Checker</div>
+  <p style="font-size:12px;color:#4a6080;line-height:1.7;margin-top:4px;">Check Smart. Borrow Better. 🇰🇪<br/>For informational purposes only. Always verify rates with lenders before borrowing.</p>
+  <div class="footer-links">
+    <button class="footer-link" onclick="openPage('page-contact')">Contact Us</button>
+    <span style="color:#2a4060;">|</span>
+    <button class="footer-link" onclick="openPage('page-privacy')">Privacy Policy</button>
+    <span style="color:#2a4060;">|</span>
+    <button class="footer-link" onclick="openPage('page-terms')">Terms &amp; Conditions</button>
+  </div>
+  <div class="powered">Powered by <span>AgunexTech</span> 🚀</div>
+  <div style="font-size:11px;color:#2a4060;margin-top:6px;">agunextech@outlook.com &nbsp;|&nbsp; +254 708 692 155</div>
+  <p style="font-size:10px;color:#1e3050;margin-top:8px;">© 2026 AgunexTech. All rights reserved.</p>
+</footer>
+
+<script>
+  function switchTab(tab,btn){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    btn.classList.add('active');
+  }
+  function showCat(cat,btn){
+    document.querySelectorAll('[id^="lenders-"]').forEach(el=>el.style.display='none');
+    document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+    document.getElementById('lenders-'+cat).style.display='block';
+    btn.classList.add('active');
+  }
+  function openPage(id){document.getElementById(id).style.display='block';window.scrollTo(0,0);}
+  function closePage(id){document.getElementById(id).style.display='none';}
+  function submitContact(){
+    const n=document.getElementById('contact-name').value.trim();
+    const e=document.getElementById('contact-email').value.trim();
+    const m=document.getElementById('contact-msg').value.trim();
+    if(!n||!e||!m){alert('Please fill in your name, email and message.');return;}
+    document.getElementById('contact-success').style.display='block';
+    document.getElementById('contact-name').value='';
+    document.getElementById('contact-email').value='';
+    document.getElementById('contact-msg').value='';
+  }
+  function fmt(n){return'KSh '+Math.round(n).toLocaleString('en-KE');}
+
+  const loans=[
+    {name:'Hustler Fund',provider:'Government of Kenya',rm:0.00667,rl:'8% p.a.',max:50000,min:500,speed:'Instant',crb:false,access:'*254#',type:'mobile',best:true},
+    {name:'Timiza (Absa)',provider:'Absa Bank',rm:0.01083,rl:'1.083% p.m.',max:150000,min:500,speed:'Instant',crb:false,access:'*848#',type:'mobile'},
+    {name:'Little Pesa',provider:'Little Pesa Ltd',rm:0.045,rl:'4.5% p.m.',max:300000,min:500,speed:'Fast',crb:false,access:'App',type:'mobile'},
+    {name:'Equity Eazzy',provider:'Equity Bank',rm:0.06,rl:'~6% p.m.',max:3000000,min:1000,speed:'Instant',crb:true,access:'*247#/App',type:'mobile'},
+    {name:'KCB M-Pesa',provider:'KCB + Safaricom',rm:0.075,rl:'7.5% p.m.',max:100000,min:50,speed:'Instant',crb:false,access:'M-Pesa',type:'mobile'},
+    {name:'M-Shwari',provider:'NCBA + Safaricom',rm:0.075,rl:'7.5%/30d',max:70000,min:100,speed:'Instant',crb:false,access:'M-Pesa',type:'mobile'},
+    {name:'Branch',provider:'Branch International',rm:0.10,rl:'2–18% p.m.',max:300000,min:500,speed:'10 mins',crb:false,access:'App',type:'mobile'},
+    {name:'Okolea',provider:'Okolea International',rm:0.1115,rl:'11.15% p.m.',max:50000,min:500,speed:'Fast',crb:false,access:'App',type:'mobile'},
+    {name:'Tala',provider:'Inventure Mobile',rm:0.15,rl:'~0.3%/day',max:50000,min:500,speed:'10 mins',crb:false,access:'App',type:'mobile'},
+    {name:'iPesa',provider:'iPesa Ltd',rm:0.18,rl:'18% p.m.',max:50000,min:500,speed:'Fast',crb:false,access:'App',type:'mobile'},
+    {name:'Zenka / Koro',provider:'Zenka Finance',rm:0.20,rl:'9–39%/loan',max:200000,min:500,speed:'Fast',crb:false,access:'App',type:'mobile'},
+    {name:'Fuliza',provider:'Safaricom',rm:0.30,rl:'1% daily',max:70000,min:10,speed:'Instant',crb:false,access:'M-Pesa',type:'mobile'},
+    {name:'Citibank Kenya',provider:'Citibank',rm:0.00833,rl:'~10% p.a.',max:5000000,min:100000,speed:'Days',crb:true,access:'Branch',type:'bank'},
+    {name:'Standard Chartered',provider:'StanChart',rm:0.00875,rl:'~10.5% p.a.',max:5000000,min:50000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'KCB Bank',provider:'KCB Group',rm:0.01083,rl:'~13% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'Equity Bank',provider:'Equity Group',rm:0.01125,rl:'~13.5% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'Co-operative Bank',provider:'Co-op Bank',rm:0.01167,rl:'~14% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'Stanbic Bank',provider:'Standard Bank Group',rm:0.01167,rl:'~14% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'NCBA Bank',provider:'NCBA Group',rm:0.01208,rl:'~14.5% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'ABSA Bank',provider:'ABSA (Barclays)',rm:0.01208,rl:'~14.5% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'I&M Bank',provider:'I&M Group',rm:0.01250,rl:'~15% p.a.',max:5000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'Family Bank',provider:'Family Bank Ltd',rm:0.01292,rl:'~15.5% p.a.',max:2000000,min:10000,speed:'Days',crb:true,access:'Branch/App',type:'bank'},
+    {name:'Credit Bank PLC',provider:'Credit Bank',rm:0.01567,rl:'~18.8% p.a.',max:2000000,min:10000,speed:'Days',crb:true,access:'Branch',type:'bank'},
+    {name:'Access Bank Kenya',provider:'Access Bank',rm:0.01592,rl:'~19.1% p.a.',max:2000000,min:10000,speed:'Days',crb:true,access:'Branch',type:'bank'},
+  ];
+
+  function compareLoans(){
+    const amount=parseFloat(document.getElementById('compareAmount').value);
+    const days=parseInt(document.getElementById('comparePeriod').value);
+    const cat=document.getElementById('compareCategory').value;
+    if(!amount||amount<100){alert('Please enter a valid amount (minimum KSh 100)');return;}
+    const months=days/30;
+    let eligible=loans.filter(l=>amount>=l.min&&amount<=l.max);
+    if(cat==='mobile')eligible=eligible.filter(l=>l.type==='mobile');
+    if(cat==='bank')eligible=eligible.filter(l=>l.type==='bank');
+    eligible.sort((a,b)=>(amount*a.rm*months)-(amount*b.rm*months));
+    let html='';
+    if(eligible.length===0){html='<div class="card" style="text-align:center;color:#d94f3d;padding:24px;">No lenders found for this amount. Try adjusting the amount or category.</div>';}
+    else{
+      eligible.forEach((loan,i)=>{
+        const interest=amount*loan.rm*months;
+        const total=amount+interest;
+        const isBest=i===0;
+        html+=`<div class="loan-card ${isBest?'best':''}">
+          ${isBest?'<div class="best-badge">✓ Best Option</div>':''}
+          <div class="loan-name">${loan.name}</div>
+          <div class="loan-provider">${loan.provider}</div>
+          <div class="loan-stats">
+            <div class="stat"><div class="stat-label">Rate</div><div class="stat-value">${loan.rl}</div></div>
+            <div class="stat"><div class="stat-label">Interest</div><div class="stat-value" style="color:#d94f3d;">+ ${fmt(interest)}</div></div>
+            <div class="stat"><div class="stat-label">Total Repay</div><div class="stat-value highlight">${fmt(total)}</div></div>
+            <div class="stat"><div class="stat-label">Speed</div><div class="stat-value">${loan.speed}</div></div>
+          </div>
+          <div style="margin-top:9px;font-size:11px;color:#6b84a0;">📱 ${loan.access} &nbsp;|&nbsp; ${loan.crb?'⚠️ CRB checked':'✅ No CRB check'} &nbsp;|&nbsp; Max: ${fmt(loan.max)}</div>
+        </div>`;
+      });
+    }
+    document.getElementById('compareResults').innerHTML=html;
+    document.getElementById('compareResults').scrollIntoView({behavior:'smooth'});
+  }
+
+  const calcRates={
+    hustler:0.00667,timiza:0.01083,littlepesa:0.045,equity:0.06,mshwari:0.075,kcb:0.075,
+    branch:0.10,okolea:0.1115,tala:0.15,ipesa:0.18,zenka:0.20,lendplus:0.195,
+    fuliza:0.30,zash:0.624,
+    citi:0.00833,stanchart:0.00875,kcbbank:0.01083,equity_bank:0.01125,coop:0.01167,
+    stanbic:0.01167,ncba:0.01208,absa:0.01208,dtb:0.01250,im_bank:0.01250,
+    nbk:0.01250,family:0.01292,hfc:0.01383,credit:0.01567,access:0.01592,
+    sacco_low:0.01,sacco_mid:0.01167
+  };
+
+  function calculateLoan(){
+    const app=document.getElementById('calcApp').value;
+    const amount=parseFloat(document.getElementById('calcAmount').value);
+    const days=parseInt(document.getElementById('calcDays').value);
+    if(!amount||!days){alert('Please fill in all fields.');return;}
+    const rate=calcRates[app]||0.01;
+    const months=days/30;
+    const interest=amount*rate*months;
+    const total=amount+interest;
+    const daily=total/days;
+    const due=new Date();due.setDate(due.getDate()+days);
+    const dueStr=due.toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'});
+    document.getElementById('r-principal').textContent=fmt(amount);
+    document.getElementById('r-interest').textContent=fmt(interest);
+    document.getElementById('r-total').textContent=fmt(total);
+    document.getElementById('r-daily').textContent=fmt(daily)+' / day';
+    document.getElementById('r-duedate').textContent=dueStr;
+    document.getElementById('calcResult').classList.add('show');
+  }
+
+  function checkEligibility(){
+    const mpesa=document.getElementById('hasMpesa').value;
+    const age=document.getElementById('mpesaAge').value;
+    const crb=document.getElementById('crb').value;
+    const activity=document.getElementById('activity').value;
+    const employed=document.getElementById('employed').value;
+    const c=[];
+    if(mpesa==='no'){
+      c.push({s:'no',t:'<strong>No M-Pesa line.</strong> Register at any Safaricom shop. Almost all Kenyan loan apps require M-Pesa.'});
+    }else{
+      c.push({s:'yes',t:'<strong>Hustler Fund</strong> — Likely eligible. Dial *254# to check your limit now.'});
+      if(age==='old'&&activity!=='low'){
+        c.push({s:'yes',t:'<strong>Timiza (Absa)</strong> — Eligible. Dial *848#. Best rates after Hustler Fund at 1.083% p.m.'});
+        c.push({s:'yes',t:'<strong>KCB M-Pesa &amp; M-Shwari</strong> — Likely eligible. Access via your M-Pesa menu.'});
+      }else if(age==='mid'){
+        c.push({s:'maybe',t:'<strong>KCB M-Pesa &amp; M-Shwari</strong> — May qualify. Increase daily M-Pesa activity to boost limit.'});
+      }else{
+        c.push({s:'no',t:'<strong>KCB M-Pesa &amp; M-Shwari</strong> — Account too new. Use M-Pesa daily for 6+ months.'});
+      }
+      if(crb==='no'){
+        c.push({s:'yes',t:'<strong>Tala, Branch &amp; Zenka</strong> — Eligible! No CRB check. Download any of these apps to apply now.'});
+        c.push({s:'yes',t:'<strong>Little Pesa &amp; Branch</strong> — Up to KSh 300,000 without CRB check. Good for larger amounts.'});
+      }else if(crb==='yes'){
+        c.push({s:'no',t:'<strong>Bank loans blocked.</strong> Dial *433# to check CRB status. Settle debts to be removed within 5 days.'});
+        c.push({s:'maybe',t:'<strong>Tala &amp; Branch</strong> — May still approve (they use their own scoring). But clearing CRB first is safer.'});
+      }else{
+        c.push({s:'maybe',t:'<strong>CRB status unknown.</strong> Dial *433# (Metropol) or *515# (TransUnion) — both free. Check before applying to banks.'});
+      }
+      if(employed==='yes'){
+        c.push({s:'yes',t:'<strong>Bank personal &amp; salary loans</strong> — Eligible. Try KCB, Equity or Co-op Bank at ~13–14% p.a. Bring payslip, ID, bank statement.'});
+        if(age==='old')c.push({s:'yes',t:'<strong>SACCO loans</strong> — If your employer has a SACCO, join now! Rates as low as 12% p.a. — Kenya\'s best deal.'});
+      }else if(employed==='business'){
+        c.push({s:'maybe',t:'<strong>SME loans</strong> — Equity, KCB, Co-op and Little Pesa offer business loans. Bring 3 months M-Pesa statements as proof of income.'});
+      }else{
+        c.push({s:'no',t:'<strong>Bank loans</strong> — Most require proof of income. Build credit history via mobile apps first, then apply for bank loans.'});
+      }
+      if(activity==='high')c.push({s:'yes',t:'<strong>High M-Pesa activity!</strong> This boosts your loan limits across all platforms. Keep transacting daily.'});
+      else c.push({s:'maybe',t:'<strong>Increase M-Pesa activity</strong> — pay bills, buy airtime, receive salary via M-Pesa. Higher activity = higher loan limits.'});
+    }
+    let html='<div class="card"><div class="card-title"><div class="icon">📋</div>Your Eligibility Report</div>';
+    c.forEach(x=>{html+=`<div class="check-item"><div class="check-dot ${x.s}">${x.s==='yes'?'✓':x.s==='no'?'✗':'!'}</div><div class="check-text">${x.t}</div></div>`;});
+    html+='</div>';
+    document.getElementById('eligibilityResults').innerHTML=html;
+    document.getElementById('eligibilityResults').scrollIntoView({behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
